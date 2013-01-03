@@ -99,7 +99,7 @@ namespace EulerProblem11
         {
             int finalLargestProduct = LargestProduct;
             int currentProduct = GridInt1 * GridInt2 * GridInt3 * GridInt4;
-            if (currentProduct >= LargestPrduct)
+            if (currentProduct >= LargestProduct)
                 finalLargestProduct = currentProduct;
             return finalLargestProduct;
         }
