@@ -35,19 +35,18 @@ namespace EulerProblem11
 
             int[,] gridInt = new int[20, 20];                   //Stores input data in a 2-dimensional integer array
             char[] charArray = new char[input.Length - 1];      //Stores input data in a 1-dimensional char array
-            int counter = 0;
-            string tempString;
             int largestProduct;                                 //Stores the largest product found
+            int product;                                        //Stores temporary (candidate) product
 
             //Populate grid array
             //First, convert the raw string input into the character array
             charArray = input.ToArray();
-            //Second, convert the character array into the two-dimensional integer array              
+            //Second, convert the character array into the two-dimensional integer array 
+            int counter = 0; 
             for (int y = 0; y <= 19; y++)
                 for (int x = 0; x <= 19; x++)
                 {
-                    tempString = charArray[counter].ToString() + charArray[counter + 1].ToString();
-                    gridInt[x, y] = Convert.ToInt32(tempString);
+                    gridInt[x, y] = Convert.ToInt32(charArray[counter].ToString() + charArray[counter + 1].ToString());
 
                     //Last column reached? If so, increment counter by two instead of three since there's no space character inbetween the next number
                     //Otherwise increment the counter by three since there's a space between the next number
@@ -59,49 +58,39 @@ namespace EulerProblem11
 
             //Begin checking for the largest product of four adjacent numbers in the grid
             largestProduct = 0;
-            //Check for vertical products
-            for (int x = 0; x <= 19; x++)
-                for (int y = 0; y <= 19; y++)
+            for (int y = 0; y <= 19; y++)
+                for (int x = 0; x <= 19; x++)
                 {
+                    //Check vertical products
                     if (y + 3 <= 19)
                     {
-                        largestProduct = GetLargestProduct(largestProduct, gridInt[x, y], gridInt[x, y + 1], gridInt[x, y + 2], gridInt[x, y + 3]);
+                        product = gridInt[x, y] * gridInt[x, y + 1] * gridInt[x, y + 2] * gridInt[x, y + 3];
+                        largestProduct = product > largestProduct ? product : largestProduct;
                     }
-                }
-            //Check for horizontal products
-            for (int y = 0; y <= 19; y++)
-                for (int x = 0; x <= 19; x++)
+                    //Check horizontal products
                     if (x + 3 <= 19)
                     {
-                        largestProduct = GetLargestProduct(largestProduct, gridInt[x, y], gridInt[x + 1, y], gridInt[x + 2, y], gridInt[x + 3, y]);
+                        product = gridInt[x, y] * gridInt[x + 1, y] * gridInt[x + 2, y] * gridInt[x + 3, y];
+                        largestProduct = product > largestProduct ? product : largestProduct;
                     }
-            //Check for diagonal products (top left to bottom right)
-            for (int y = 0; y <= 19; y++)
-                for (int x = 0; x <= 19; x++)
+                    //Check for diagonal products (top left to bottom right)
                     if (x + 3 <= 19 && y + 3 <= 19)
                     {
-                        largestProduct = GetLargestProduct(largestProduct, gridInt[x, y], gridInt[x + 1, y + 1], gridInt[x + 2, y + 2], gridInt[x + 3, y + 3]);
+                        product = gridInt[x, y] * gridInt[x + 1, y + 1] * gridInt[x + 2, y + 2] * gridInt[x + 3, y + 3];
+                        largestProduct = product > largestProduct ? product : largestProduct;
                     }
-            //Check for diagonal products (top right to bottom left)
-            for (int y = 0; y <= 19; y++)
-                for (int x = 0; x <= 19; x++)
+                    //Check for diagonal products (top right to bottom left)
                     if (x - 3 >= 0 && y + 3 <= 19)
                     {
-                        largestProduct = GetLargestProduct(largestProduct, gridInt[x, y], gridInt[x - 1, y + 1], gridInt[x - 2, y + 2], gridInt[x - 3, y + 3]);
+                        product = gridInt[x, y] * gridInt[x - 1, y + 1] * gridInt[x - 2, y + 2] * gridInt[x - 3, y + 3];
+                        largestProduct = product > largestProduct ? product : largestProduct;
                     }
+                }
 
             Console.WriteLine("The largest product in the grid is: {0}", largestProduct);
             Console.ReadKey();
 
         }
 
-        static int GetLargestProduct(int LargestProduct, int GridInt1, int GridInt2, int GridInt3, int GridInt4)
-        {
-            int finalLargestProduct = LargestProduct;
-            int currentProduct = GridInt1 * GridInt2 * GridInt3 * GridInt4;
-            if (currentProduct >= LargestProduct)
-                finalLargestProduct = currentProduct;
-            return finalLargestProduct;
-        }
     }
 }
