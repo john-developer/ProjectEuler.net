@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EulerProblem10
+//Problem Description: Find the sum of all the primes below two million.
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int maxLimit = 2000000;                                 //Stores the upper limit of numbers to sum
+            long sum;                                               //Stores the sum of all prime numbers
+
+            bool[] sieveList = new bool[maxLimit];                  //Stores whether a number (corresponding to the array index) is prime
+            int i;                                                  //Represents the current number in the loop sequence
+
+            sieveList[0] = true;
+            sieveList[1] = true;
+            sieveList[2] = false;
+
+            //Populate sieveList with prime number check
+            i = 3;
+            while (i <= maxLimit - 1 && Math.Pow(i, 2) <= maxLimit - 1)
+            {
+                for (int j = (int)Math.Pow(i, 2); j <= maxLimit - 1; j += i)
+                    sieveList[j] = true;
+                do
+                    i += 2;
+                while ((i < maxLimit - 1) && sieveList[i] == true);
+            }
+
+            //Add all numbers in sieveList that are prime
+            sum = 2;
+            for (int j = 3; j <= maxLimit - 1; j+=2)
+            {
+                if (sieveList[j] == false)
+                    sum += j;
+            }
+
+            Console.WriteLine("The sum of all prime numbers less than 2000000 is: {0}", sum);
+            Console.ReadKey();
+        }
+    }
+}
