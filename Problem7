@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EulerProblem7
+//Problem Description: Find the 10001st prime number
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int maxLimit = 1000000;                 //Stores Arbitrary upper limit of all natural numbers
+            int primeCount;                         //Counter to store the number of prime numbers found
+            int targetPrimeCount = 10001;           //The desired prime number count
+            int targetPrimeNumber;                  //The 10001st prime number
+
+            bool[] sieveList = new bool[maxLimit];  //This array stores whether the natural number (represented by the index) is prime
+            int i;
+            sieveList[0] = true;
+            sieveList[1] = true;
+            sieveList[2] = false;
+
+            //Begin populating sieveList with prime number check (store false if prime number)
+            i = 3;
+            primeCount = 1;
+            targetPrimeNumber = 0;
+            while (i <= maxLimit -1 && Math.Pow(i, 2) <= maxLimit -1)
+            {
+                for (int j = (int)Math.Pow(i,2); j <=maxLimit-1; j+=i)
+                    sieveList[j] = true;
+                do
+                    i+=2;
+                while ((i < maxLimit - 1) && sieveList[i] == true);
+            }
+
+            //Find the 10001st prime number using the populated sieveList array
+            primeCount = 0;
+            for (int j = 0; j <= maxLimit - 1; j++)
+            {
+                //Count the prime numbers
+                if (!(j % 2 == 0) && sieveList[j] == false || j == 2)
+                    primeCount++;
+                //10001st prime found?
+                if (primeCount == targetPrimeCount)
+                {
+                    targetPrimeNumber = j;
+                    break;
+                }
+            }
+            Console.WriteLine("The 10001st prime number is: {0}", targetPrimeNumber);
+            Console.ReadKey();
+        }
+    }
+}
