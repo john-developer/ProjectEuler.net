@@ -1,0 +1,138 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EulerProblem5
+//Problem Description: Find the smallest common multiple of the natural numbers 1-20
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> LFactors = new List<int>();           //List of all prime factors 
+            List<int> LTempFactors = new List<int>();       //List of prime factors for a certain number
+            int prevNum = 0;
+            int countInTemp;
+            int countInFinal;
+            long smallestCommonFactor = 1;
+
+            for (int x = 2; x <= 20; x++)
+            { 
+                LTempFactors = FindAllPrimeFactors(x);
+                LTempFactors.Sort();
+                foreach(int y in LTempFactors)
+                {
+                    if (prevNum != y)
+                    {
+                        //Count the number of occurences of y in x
+                        countInTemp =
+                            (from num in LTempFactors
+                             where num == y
+                             select num).Count();
+                        //Count the number of occurences of y in LFactors
+                        countInFinal =
+                            (from num in LFactors
+                             where num == y
+                             select num).Count();
+                        //Compare the number of prime factors (y) to number of occurences already found in LFactors
+                        if (countInTemp > countInFinal)
+                        {
+                            //Add the differnce to Lfactors
+                            for (int z = 1; z <= countInTemp - countInFinal; z++)
+                            {
+                                LFactors.Add(y);
+                            }
+                        }
+                    }
+                    prevNum = y;
+                }
+            }
+
+            foreach (int y in LFactors)
+            {
+                smallestCommonFactor *= y;
+            }
+
+            Console.WriteLine("The smallest common multiple of 1-20 is {0}", smallestCommonFactor);
+            Console.ReadLine();
+
+        }
+
+        /// <summary>
+        /// Constructs a list of all prime factors for a given number
+        /// </summary>
+        /// <param name="sourceNum">Number to collect all its prime factors</param>
+        /// <returns>A List Collection of all prime factors of "sourceNum"</returns>
+        static List<int> FindAllPrimeFactors(int sourceNum)
+        {
+            List<int> LPrimeFactors = new List<int>();
+            int end = (int)System.Math.Sqrt(sourceNum);
+            int smallestPrimeFactor;
+            int divLeft;
+            int divRight;
+
+            if (IsPrime(sourceNum))
+            {
+                LPrimeFactors.Add(sourceNum);    
+                return LPrimeFactors;
+            }
+
+            smallestPrimeFactor = (int)FindLowestPrimeFactor(sourceNum);
+            divLeft = smallestPrimeFactor;
+            divRight = sourceNum / divLeft;
+            LPrimeFactors.Add(divLeft);
+
+            while(!IsPrime(divRight))
+            {
+                divLeft = (int)FindLowestPrimeFactor(divRight);
+                divRight = divRight / divLeft;
+                LPrimeFactors.Add(divLeft);
+            }
+            LPrimeFactors.Add(divRight);
+            return LPrimeFactors;
+        }
+
+        /// <summary>
+        /// Finds the lowest prime factor of a given input
+        /// </summary>
+        /// <param name="sourceNum">Number to determine its lowest prime factor</param>
+        /// <returns>A long representing the lowest prime factor of "sourceNum"</returns>
+        public static long FindLowestPrimeFactor(long sourceNum)
+        {
+            long end = sourceNum / 2 + 1;
+
+            if (IsPrime(sourceNum))
+                return sourceNum;
+
+            for (long x = 2; x <= end; x++)
+            {
+                if (sourceNum % x == 0 && IsPrime(x))
+                {
+                    return x;
+                }
+            }
+            return sourceNum;
+        }
+
+        /// <summary>
+        /// Simple trial division to see if a specified number is prime
+        /// </summary>
+        /// <param name="Candidate">Candidate number to check if prime</param>
+        /// <returns>True if "Candidate" is prime, false if not </returns>
+        public static bool IsPrime(long Candidate)
+        {
+
+            if (Candidate == 1) { return false; }
+            if (Candidate == 2 || Candidate == 3) { return true; }
+            long sqrtTarget = (long)Math.Sqrt(Candidate) + 1;
+            for (long x = 2; x <= sqrtTarget; x++)
+            {
+                if (Candidate % x == 0)
+                    return false;
+            }
+            return true;
+        }
+    }
+}
