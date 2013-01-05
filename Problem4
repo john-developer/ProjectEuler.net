@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EulerProblem4
+//Problem Description: Find the largest palindrome from the product of (2) three digit numbers
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int product;                    //The product of each loop iteration
+            int largestPalindrome;          //The largest palindrome found
+
+            largestPalindrome = 0;
+            for (int i = 999; i >= 100; i--)
+            {
+                for (int j = 999; j >= 100; j--)
+                {
+                    product = i * j;
+                    if (product <= largestPalindrome)
+                    {
+                        break; //End j-loop since no possible product can be larger than the largest palindrome                       
+                    }
+                    else if (IsPalindrome(product.ToString()))
+                    {
+                        largestPalindrome = product;    //Store the largest palindrome found so far
+                    }
+                }
+                if (i * 999 <= largestPalindrome)
+                    break;  //End i-loop since no possible poduct can be larger than the largest palindrome found so far
+            }
+            //Display the largest palindrome
+            Console.WriteLine("The largest palindrome of the product of (2) 3 digit numbers is: {0}", largestPalindrome.ToString());
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Checks if a given string is a palindrome
+        /// </summary>
+        /// <param name="Candidate">String to check</param>
+        /// <returns>True if "Candidate" is a palindrome, false if not</returns>
+        static bool IsPalindrome(string Candidate)
+        {
+            int i = 0;
+            int j = Candidate.Length - 1;
+
+            while (j > i)
+            {
+                if (Candidate[i] != Candidate[j])
+                    return false;
+                ++i;
+                --j;
+            }
+            return true;
+        }
+    }
+}
