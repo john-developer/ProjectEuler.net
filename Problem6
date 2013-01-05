@@ -1,0 +1,31 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EulerProblem6
+//Problem Description: Find the difference between the square of sums and the sum of squares of all natural numbers up to 100
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int sumOfSquares = 0;                   //The sum of all the square natural numbers up to the limit
+            int sum = 0;                            //The sum of all the natual number up to the limit
+            int squareOfSum = 0;                    //The square of the sum of all the natural numbers up to the limit
+            int upperLimit = 100;                   //The upper limit of natural numbers
+
+            //Loop thru all the natural numbers up to the limit
+            for (int x = 1; x <= upperLimit; x++)
+            {
+                sumOfSquares += x * x;
+                sum += x;
+            }
+
+            squareOfSum = sum * sum;
+            Console.WriteLine("The difference between the square of sums and the sum of squares of all natural numbers up to {0} is: {1}", upperLimit, squareOfSum - sumOfSquares);
+            Console.ReadLine();
+        }
+    }
+}
